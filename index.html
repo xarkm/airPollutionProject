@@ -1,0 +1,247 @@
+<!-- 
+
+    LICENSING
+
+    LONDON AIR QUALITY API LICENSE
+    Contains public sector information licensed under the Open Government Licence v2.0.
+
+
+    LEAFLET API LICENSE
+    Copyright (c) 2010-2021, Vladimir Agafonkin
+    Copyright (c) 2010-2011, CloudMade
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification, are
+    permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, this list of
+        conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice, this list
+        of conditions and the following disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+    COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+    EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+    HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+    TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+    HEATMAP.JS PLUGIN LICENSE
+    Copyright (c) 2015 Patrick Wied
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    
+    CHARTJS API LICENSE
+    Copyright 2021 Chart.js contributors
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy of 
+    this software and associated documentation files (the "Software"), to deal in the 
+    Software without restriction, including without limitation the rights to use, copy, 
+    modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
+    and to permit persons to whom the Software is furnished to do so, subject to the 
+    following conditions:
+
+    The above copyright notice and this permission notice shall be included in all copies 
+    or substantial portions of the Software. -->
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Mark's London Air Quality Project</title>
+        <!--Setup for downloading the Leaflet map, including style sheet and JavaScript code-->
+        <link   rel="stylesheet" href="index.css">
+        <link   rel="stylesheet" 
+                href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+                integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+                crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+                integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+                crossorigin=""></script>
+        <!--Setup for the heatmap plugin, using the locally downloaded JavaScript files-->
+        <script src="heatmap.js"></script>
+        <script src="leaflet-heatmap.js"></script>
+        <!--Setup for the fullscreen button-->
+        <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+        <!--Setup for Chart.js, to create a bar chart for easy comparison of data-->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    </head>
+
+
+
+    <body>
+        <div class="block">
+            <div class="topblocktext">Mark Mataac</div>
+        </div>
+        <br><br><br><br>
+        <h1 class="heading">Air Pollution Map and Graph Visualisation</h1>
+        <br><br><br>
+        
+        <!--Contains all the maps-->
+        <main id="row">
+            <!--Setup for all 5 maps, to employ a small multiples style project-->
+            <div class="allmapfeaturesclass">
+                <div class="mapclass" id="mapid1"></div>
+                <!--Contains labels that will have information on the data displayed (number of datapoints, date, pollutant)-->
+                <div id="laqDataInfo1">No data displayed</div>
+                <label for="map1">1st Map:</label><br>
+                <input type="date" id="map1newdate" style="visibility: hidden">
+                <!--Form for user to choose pollutant to display data of-->
+                <select name="poll1" id="pollutant1" autocomplete="off">
+                    <option value="default">- Select a pollutant -</option>
+                    <option value="NO2">Nitrogen dioxide (NO2)</option>
+                    <option value="PM10">PM10 Particulate (PM10)</option>
+                    <option value="PM25">PM25 Particulate (PM25)</option>
+                    <option value="O3">Ozone (O3)</option>
+                    <option value="SO2">Sulphur Dioxide (SO2)</option>
+                </select><br>
+                <button type="button" id="newDataMapDaily1" onclick="getNewDailyDataForChosenMap(1)" disabled>Load date's data</button>
+                <button type="button" id="newDataMapMonthly1" onclick="getNewMonthlyDataForChosenMap(1)" disabled>Load month's data</button>
+                <br>
+                <div class="errormessage" id="map1newdateerror"></div>
+            </div> 
+            <div class="allmapfeaturesclass">
+                <div class="mapclass" id="mapid2"></div>
+                <div id="laqDataInfo2">No data displayed</div>
+                <!--For all other maps, form will also include availability to select the date. There is a minimum and maximum 
+                date allowed for the user to select, set from 1995-01-01 to previous day of current date. The initial max date 
+                of 1995-01-01 is updated in the file index.js-->
+                <label for="map2">2nd Map:</label><br>
+                <input type="date" id="map2newdate" name="map2" min="1995-01-01" max="1995-01-01" placeholder="yyyy-mm-dd" autocomplete="off">
+                <select name="poll2" id="pollutant2" autocomplete="off">
+                    <option value="default">- Select a pollutant -</option>
+                    <option value="NO2">Nitrogen dioxide (NO2)</option>
+                    <option value="PM10">PM10 Particulate (PM10)</option>
+                    <option value="PM25">PM25 Particulate (PM25)</option>
+                    <option value="O3">Ozone (O3)</option>
+                    <option value="SO2">Sulphur Dioxide (SO2)</option>
+                </select><br>
+                <button type="button" id="newDataMapDaily2" onclick="getNewDailyDataForChosenMap(2)" disabled>Load date's data</button>
+                <button type="button" id="newDataMapMonthly2" onclick="getNewMonthlyDataForChosenMap(2)" disabled>Load month's data</button>
+                <div class="errormessage" id="map2newdateerror"></div>
+            </div>
+            <div class="allmapfeaturesclass">
+                <div class="mapclass" id="mapid3"></div>
+                <div id="laqDataInfo3">No data displayed</div>
+                <label for="map3">3rd Map:</label><br>
+                <input type="date" id="map3newdate" name="map3" min="1995-01-01" max="1995-01-01" placeholder="yyyy-mm-dd" autocomplete="off">
+                <select name="poll3" id="pollutant3" autocomplete="off">
+                    <option value="default">- Select a pollutant -</option>
+                    <option value="NO2">Nitrogen dioxide (NO2)</option>
+                    <option value="PM10">PM10 Particulate (PM10)</option>
+                    <option value="PM25">PM25 Particulate (PM25)</option>
+                    <option value="O3">Ozone (O3)</option>
+                    <option value="SO2">Sulphur Dioxide (SO2)</option>
+                </select><br>
+                <button type="button" id="newDataMapDaily3" onclick="getNewDailyDataForChosenMap(3)" disabled>Load date's data</button>
+                <button type="button" id="newDataMapMonthly3" onclick="getNewMonthlyDataForChosenMap(3)" disabled>Load month's data</button>
+                <div class="errormessage" id="map3newdateerror"></div>
+            </div>
+            <div class="allmapfeaturesclass">
+                <div class="mapclass" id="mapid4"></div>
+                <div id="laqDataInfo4">No data displayed</div>
+                <label for="map4">4th Map:</label><br>
+                <input type="date" id="map4newdate" name="map4" min="1995-01-01" max="1995-01-01" placeholder="yyyy-mm-dd" autocomplete="off">
+                <select name="poll4" id="pollutant4" autocomplete="off">
+                    <option value="default">- Select a pollutant -</option>
+                    <option value="NO2">Nitrogen dioxide (NO2)</option>
+                    <option value="PM10">PM10 Particulate (PM10)</option>
+                    <option value="PM25">PM25 Particulate (PM25)</option>
+                    <option value="O3">Ozone (O3)</option>
+                    <option value="SO2">Sulphur Dioxide (SO2)</option>
+                </select><br>
+                <button type="button" id="newDataMapDaily4" onclick="getNewDailyDataForChosenMap(4)" disabled>Load date's data</button>
+                <button type="button" id="newDataMapMonthly4" onclick="getNewMonthlyDataForChosenMap(4)" disabled>Load month's data</button>
+                <div class="errormessage" id="map4newdateerror"></div>
+            </div>
+            <div class="allmapfeaturesclass">
+                <div class="mapclass" id="mapid5"></div>
+                <div id="laqDataInfo5">No data displayed</div>
+                <label for="map5">5th Map:</label><br>
+                <input type="date" id="map5newdate" name="map5" min="1995-01-01" max="1995-01-01" placeholder="yyyy-mm-dd" autocomplete="off">
+                <select name="poll5" id="pollutant5" autocomplete="off">
+                    <option value="default">- Select a pollutant -</option>
+                    <option value="NO2">Nitrogen dioxide (NO2)</option>
+                    <option value="PM10">PM10 Particulate (PM10)</option>
+                    <option value="PM25">PM25 Particulate (PM25)</option>
+                    <option value="O3">Ozone (O3)</option>
+                    <option value="SO2">Sulphur Dioxide (SO2)</option>
+                </select><br>
+                <button type="button" id="newDataMapDaily5" onclick="getNewDailyDataForChosenMap(5)" disabled>Load date's data</button>
+                <button type="button" id="newDataMapMonthly5" onclick="getNewMonthlyDataForChosenMap(5)" disabled>Load month's data</button>
+                <div class="errormessage" id="map5newdateerror"></div>
+            </div>
+        </main><br>
+
+        <!---->
+        <main id="row">
+            <!---->
+            <div class="allchartfeaturesclass">
+                <!---->
+                <div class="chartcontainer">
+                    <canvas id="countMapChart"></canvas>
+                </div>
+                <!--Button to display some default data-->
+                <button type="button" id="defaultdatabutton" onclick="getDefaulDailyDataForAllMaps(); document.getElementById('pollutant1').selectedIndex = 0; 
+                    document.getElementById('pollutant2').selectedIndex = 0; document.getElementById('pollutant3').selectedIndex = 0; 
+                    document.getElementById('pollutant4').selectedIndex = 0; document.getElementById('pollutant5').selectedIndex = 0; 
+                    document.getElementById('map2newdate').value = ''; document.getElementById('map3newdate').value = ''; 
+                    document.getElementById('map4newdate').value = ''; document.getElementById('map5newdate').value = ''; " disabled>Load default daily data</button><br>
+            </div>
+            <!---->
+            <div class="allchartfeaturesclass">
+                <div class="chartcontainer">
+                    <canvas id="annualCountChart"></canvas>
+                </div>
+                <main id="row">
+                    <!---->
+                    <label for="startyear">First Year: </label>
+                    <select id="startyearrange"></select>
+                    <label for="endyear">Last Year: </label>
+                    <select id="endyearrange"></select>
+                    <button type="button" id="annualcountchanges" onclick="getAnnualChanges()">Load ug/m3 annual means</button>
+                </main>
+                <div class="errormessage" id="yearrangeerror"></div>
+            </div>
+        </main><br>
+
+        <div class="initialloadingclass" id="waittoload">Date selection options are disabled until the most recent available data has been found.</div>
+        <div class="initialloadingclass" id="recentdataloading"></div><br>
+
+        <div class="infoclass">This project displays air pollution data in London via data from London Air Quality, in 
+            a heatmap form on overlaid on the maps, in a bar graph, and in a line graph. The heatmap and bar graph visualise 
+            daily and/or monthly data, while the line graph visualises annual averages. There are 5 maps, each of which can 
+            display data on different dates and pollutants, apart from the first map which is fixed to the most recent date 
+            with data available. The selection options will be available once the date with the most recent available data 
+            has been found. The button below the bar graph loads in some default data, which are the 5 most recent dates with 
+            data available, for the pollutant NO2.
+        </div><br>
+        <div class="infoclass">Note: This website has been tested and works on Chrome and Firefox. The validity of 
+            the certificate on the LAQ API can affect whether the website works on Chrome however. You may also have to change 
+            the size of the browser window or zoom levels if the maps or graphs do not display correctly.</div><br>
+
+        <div class="block">
+            <div class="bottomblocktext">Made using Leaflet API, London Air Quality API, heatmap.js plugin, and Chartjs.</div>
+        </div>
+
+        <!--Load the index.js file-->
+        <script src="index.js"></script> 
+    </body>
+</html>

@@ -1,0 +1,96 @@
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 12.5px;
+}
+
+button {
+    font-family: Arial, sans-serif;
+    font-size: 12.5px;
+}
+
+input, select, canvas {
+    font-family: Arial, sans-serif;
+    font-size: 12.5px;
+    margin-right: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.block {
+    width: 1370px;
+    background-color:mediumblue;
+    opacity: 0.7;
+}
+
+.topblocktext {
+    color:white;
+    padding-left: 1%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.heading {
+    margin: 0 5%;
+    font-size: 37px;
+    color: mediumblue;
+}
+
+#row {
+    content: "";
+    display: table;
+    clear: both;
+}
+  
+.mapclass {
+    float: left;
+    width: 270px;
+    height: 276px;
+    margin: 0 2px;
+}
+
+.allmapfeaturesclass {
+    float: left;
+    width: 270px;
+    margin: 0 1.5px;
+}
+
+.chartcontainer {
+    position: relative;
+    float: left;
+    width: 681px;
+    height: 320px;
+    margin: 0 2px;
+    padding-bottom: 20px
+}
+
+.allchartfeaturesclass {
+    float: left;
+    width: 681px;
+    margin: 0 2px
+}
+
+
+.infoclass {
+    width: 1366px;
+    margin: 0 2px
+}
+
+.initialloadingclass {
+    width: 1366px;
+    margin: 0 2px;
+    color: red;
+}
+
+.bottomblocktext {
+    color:white;
+    padding-left: 1%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.errormessage {
+    color: red;
+}
