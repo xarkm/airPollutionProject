@@ -28,7 +28,7 @@ may work but they are not necessarily supported, so correct operation cannot be
 guaranteed. 
 The website is hosted on: https://github.kcl.ac.uk/pages/k1890280/prjMarkMataac/
 
-You may also wish to view the website locally. In this case, simply downloading this 
-repository and opening the file 'index.html' in your browser should allow you to do this. 
-Again, the website should work on Chrome and Firefox, with other browsers not being 
-tested on for support.
+If you don't have access to KCL GitHub Enterprise, you may also view the website locally. 
+In this case, simply downloading this repository and opening the file 'index.html' in your 
+browser should allow you to do this. Again, the website should work on Chrome and Firefox, 
+with other browsers not being tested on for support.
