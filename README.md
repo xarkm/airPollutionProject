@@ -1,4 +1,4 @@
-# prjMarkMataac
+# Air Pollution Project - Final (Third) Year Individual Project
 
 I verify that I am the sole author of the programs contained in this folder, except where 
 explicitly stated to the contrary.
