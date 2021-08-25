@@ -32,3 +32,19 @@ If you don't have access to KCL GitHub Enterprise, you may also view the website
 In this case, simply downloading this repository and opening the file 'index.html' in your 
 browser should allow you to do this. Again, the website should work on Chrome and Firefox, 
 with other browsers not being tested on for support.
+
+Below are .gifs of how the web app works. They are sped up to skip over long waiting times
+that are due to internet speed.
+
+Loading in default data (5 most recent data points and NO2):
+![APPdefault](https://user-images.githubusercontent.com/47302107/130794050-38f36ed3-68f9-4eb2-af7b-f5d82402a4a9.gif)
+
+Loading in data for specific days and pollutants:
+![APPday](https://user-images.githubusercontent.com/47302107/130794026-fa97ff1a-a202-4366-9498-629bd27b95e6.gif)
+
+Loading in data for specific month and pollutant:
+![APPmonth](https://user-images.githubusercontent.com/47302107/130794052-adb5b04a-ef40-4b0e-9d15-cdd63f7c5ebd.gif)
+
+Loading in average data over several years:
+![APPyear](https://user-images.githubusercontent.com/47302107/130794055-2f670355-8d66-4951-a1c6-c3ac7162c21a.gif)
+
